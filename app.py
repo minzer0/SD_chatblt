@@ -3,7 +3,7 @@ import streamlit as st
 
 
 #streamlit/style.css 파일 열기
-with open("./.streamlit/style.css") as css:
+with open("./style.css") as css:
     # CSS 파일을 읽어와서 스타일 적용
     st.markdown(f'<style>{css.read()}</style>', unsafe_allow_html=True)
 
@@ -22,7 +22,7 @@ openai_api_key = st.secrets['OPENAI_API_KEY']
 if "conversation_history" not in st.session_state:    
     st.session_state.conversation_history = [
         {"role": "system", "content": st.secrets['system_prompt']},
-        {"role": "assistant", "content": f"안녕! 나는 모니라고 해😊"}
+        {"role": "assistant", "content": f"Nice to meet you! I'm Yeonwoo😊"}
     ]
 
 # Display chat messages from history on app rerun
