@@ -1,57 +1,51 @@
+from openai import OpenAI
 import streamlit as st
 
 
-########################################################################################
-# SETUP 
-
-st.set_page_config(
-    page_title = "고민모니",
-    page_icon = "./images/logo.png"
-)
-
-# .streamlit/style.css 파일 열기
+#streamlit/style.css 파일 열기
 with open("./.streamlit/style.css") as css:
     # CSS 파일을 읽어와서 스타일 적용
     st.markdown(f'<style>{css.read()}</style>', unsafe_allow_html=True)
 
-########################################################################################
+st.markdown("# Chat with Yeonwoo💭", unsafe_allow_html=True)
 
-st.image('./images/app_img.png')
+# Set a default model
+if "openai_model" not in st.session_state:    
+    st.session_state["openai_model"] = "gpt-4o"
 
-# 스타일이 적용된 Markdown 출력
-st.markdown("""
-<div style='text-align: center; font-size: 25px;'>
-당신의 학업 고민을 들려주세요!<br>학업 스트레스 모니터링 챗봇
-</div>
-""", unsafe_allow_html=True)
+# Set OpenAI API key 
+client = OpenAI(api_key=st.secrets['OPENAI_API_KEY'], 
+                organization=st.secrets['OPENAI_ORGANIZATION'])
+openai_api_key = st.secrets['OPENAI_API_KEY']
 
-# 큰 타이틀 추가
-st.markdown(
-    "<div style='text-align: center; font-size: 40px; font-weight: bold;'>"
-    "고민모니"
-    "</div>",
-    unsafe_allow_html=True,
-)
+# Initialize chat history
+if "conversation_history" not in st.session_state:    
+    st.session_state.conversation_history = [
+        {"role": "system", "content": st.secrets['system_prompt']},
+        {"role": "assistant", "content": f"안녕! 나는 모니라고 해😊"}
+    ]
 
-# 아래쪽에 여러 줄의 공백
-st.write("#")
+# Display chat messages from history on app rerun
+for message in st.session_state.conversation_history:        
+    if message["role"]=='system':
+        continue
+    st.chat_message(message["role"]).write(message["content"]) 
+    print(message) 
 
-col1, col2, col3 , col4, col5 = st.columns(5)
-
-with col3 :
-    if st.button("로그인", use_container_width=True):
-        st.switch_page("pages/Login.py")
-    if st.button("회원가입",use_container_width=True):
-        st.switch_page("pages/Signup.py")
-    # st.image('./images/HAI_logo.png', width = 100)
-
-
-# 회색 배경에 작은 글씨로 중앙 정렬된 캡션 추가
-st.write("#")
-
-st.markdown(
-    "<div style='text-align: center; font-size: 15px;'>"
-    "👯 본 앱은 서울과학기술대학교 HAI LAB 유박사 팀에서 개발했습니다 👯"
-    "</div>",
-    unsafe_allow_html=True
-)
+if user_input := st.chat_input():            
+    #Add user message to chat history
+    st.session_state.conversation_history.append({"role": "user", "content": user_input})
+    st.chat_message("user").write(user_input)      
+    with st.spinner('Yeonwoo is typing...'):
+        #response generation
+        response = client.chat.completions.create(
+            model=st.session_state["openai_model"], 
+            messages=st.session_state.conversation_history,
+            #stream=True,
+            max_tokens=1000,
+            temperature=0.7,      
+            )
+        assistant_reply = response.choices[0].message.content
+        st.session_state.conversation_history.append({"role": "assistant", "content": assistant_reply})
+        st.chat_message("assistant").write(assistant_reply)     
+        
