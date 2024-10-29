@@ -2,9 +2,6 @@
 
 .chat-message {
     font-weight: bold;
-    display: flex;
-    align-items: flex-start;;
-    height: 100%;  /* 부모 요소의 높이 전체를 채움 */
 }
 /* 특정 Streamlit 클래스에 대한 글씨 크기 조정 */
 [class^=st-emotion] {
