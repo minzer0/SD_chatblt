@@ -27,11 +27,10 @@ if "conversation_history" not in st.session_state:
 
 # Display chat messages from history on app rerun
 for message in st.session_state.conversation_history:        
-    if message["role"] == 'system':
+    if message["role"]=='system':
         continue
-    message_content = f'<div class="chat-message" style="font-weight: bold;">{message["content"]}</div>'
-    st.chat_message(message["role"]).markdown(message_content, unsafe_allow_html=True)
-    print(message)
+    st.chat_message(message["role"]).write(message["content"]) 
+    print(message) 
 
 if user_input := st.chat_input():            
     #Add user message to chat history
