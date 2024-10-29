@@ -29,8 +29,8 @@ if "conversation_history" not in st.session_state:
 for message in st.session_state.conversation_history:        
     if message["role"] == 'system':
         continue
-    message_content = f'<div class="chat-message">{message["content"]}</div>'
-    st.chat_message(message["role"]).markdown(message_content, unsafe_allow_html=True) 
+    message_content = f'<div class="chat-message" style="font-weight: bold;">{message["content"]}</div>'
+    st.chat_message(message["role"]).markdown(message_content, unsafe_allow_html=True)
     print(message)
 
 if user_input := st.chat_input():            
