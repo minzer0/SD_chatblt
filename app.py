@@ -7,7 +7,7 @@ with open("./style.css") as css:
     # CSS 파일을 읽어와서 스타일 적용
     st.markdown(f'<style>{css.read()}</style>', unsafe_allow_html=True)
 
-st.markdown("# Chat with Yeonwoo💭", unsafe_allow_html=True)
+st.markdown("# Chatbot for Academic Stress Assessment💭", unsafe_allow_html=True)
 
 # Set a default model
 if "openai_model" not in st.session_state:    
