@@ -4,7 +4,6 @@
     font-weight: bold;
     display: flex;
     align-items: center;
-    min-height: 100px; /* 원하는 높이에 맞게 조정 */
 }
 /* 특정 Streamlit 클래스에 대한 글씨 크기 조정 */
 [class^=st-emotion] {
