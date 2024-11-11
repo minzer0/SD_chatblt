@@ -27,25 +27,29 @@ if "conversation_history" not in st.session_state:
 
 # Display chat messages from history on app rerun
 for message in st.session_state.conversation_history:        
-    if message["role"]=='system':
+    if message["role"] == 'system':
         continue
-    st.chat_message(message["role"]).write(message["content"]) 
-    print(message) 
+    formatted_message = f"<b>{message['content']}</b>"  # 메시지를 볼드체로 변경
+    st.markdown(formatted_message, unsafe_allow_html=True)  # HTML로 렌더링
+
 
 if user_input := st.chat_input():            
-    #Add user message to chat history
+    # Add user message to chat history
     st.session_state.conversation_history.append({"role": "user", "content": user_input})
-    st.chat_message("user").write(user_input)      
+    formatted_user_input = f"<b>{user_input}</b>"  # 사용자 입력을 볼드체로 변경
+    st.markdown(formatted_user_input, unsafe_allow_html=True)
+    
     with st.spinner('Yeonwoo is typing...'):
-        #response generation
+        # response generation
         response = client.chat.completions.create(
             model=st.session_state["openai_model"], 
             messages=st.session_state.conversation_history,
-            #stream=True,
             max_tokens=1000,
             temperature=0.7,      
-            )
+        )
         assistant_reply = response.choices[0].message.content
         st.session_state.conversation_history.append({"role": "assistant", "content": assistant_reply})
-        st.chat_message("assistant").write(assistant_reply)     
+        formatted_assistant_reply = f"<b>{assistant_reply}</b>"  # 챗봇 응답을 볼드체로 변경
+        st.markdown(formatted_assistant_reply, unsafe_allow_html=True)
+
         
