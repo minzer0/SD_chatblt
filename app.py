@@ -22,7 +22,7 @@ openai_api_key = st.secrets['OPENAI_API_KEY']
 if "conversation_history" not in st.session_state:    
     st.session_state.conversation_history = [
         {"role": "system", "content": st.secrets['system_prompt']},
-        {"role": "assistant", "content": f"Nice to meet you! I'm Yeonwoo😊"}
+        {"role": "assistant", "content": f"Nice to meet you! I'm Jessica😊"}
     ]
 
 # Display chat messages from history on app rerun
